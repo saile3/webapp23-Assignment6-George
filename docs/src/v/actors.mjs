@@ -121,7 +121,7 @@ updateFormEl["commit"].addEventListener("click", function () {
   const slots = {
     personId: updateFormEl.personId.value,
     name: updateFormEl.name.value,
-    agent: updateFormEl["agent"].selectedIndex
+    agent: updateFormEl["agent"].options[updateFormEl["agent"].selectedIndex].value
   }
   // check all property constraints
   /* SIMPLIFIED CODE: no before-save validation of name */
