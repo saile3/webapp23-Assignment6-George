@@ -179,7 +179,6 @@ function fillSelectWithOptions(selectEl, selectionRange, keyProp, optPar) {
       }
     }
     selectEl.add(optionEl);
-    console.log("done updating Direcor " + optionEl);
   }
 }
 //***************  M I S C  ****************************************
@@ -245,19 +244,37 @@ function getSuperType(Class) {
 }
 
 function createListFromMap(entityTbl, displayProp) {
-  console.log("In List Map " + entityTbl);
   const listEl = document.createElement("ul");
   //console.log(entityTbl, displayProp);
   // delete old contents
   listEl.innerHTML = "";
   // create list items from object property values
   for (const key of Object.keys(entityTbl)) {
-    console.log("In List Map forloop" + key);
     const listItemEl = document.createElement("li");
     listItemEl.textContent = entityTbl[key][displayProp];
     listEl.appendChild(listItemEl);
   }
   return listEl;
+}
+/**
+ * Add an item to a list element showing selected objects
+ *
+ * @param {object} listEl  A list element
+ * @param {string} stdId  A standard identifier of an object
+ * @param {string} humanReadableId  A human-readable ID of the object
+ * @param {string} classValue?  A class value to be assigned to the list item
+ */
+function addItemToListOfSelectedItems(listEl, stdId, humanReadableId, classValue) {
+  var el = null;
+  const listItemEl = document.createElement("li");
+  listItemEl.setAttribute("data-value", stdId);
+  el = document.createElement("span");
+  el.textContent = humanReadableId;
+  listItemEl.appendChild(el);
+  el = createPushButton("✕");
+  listItemEl.appendChild(el);
+  if (classValue) listItemEl.classList.add(classValue);
+  listEl.appendChild(listItemEl);
 }
 /**
  * Fill a Choice Set element with items
@@ -348,6 +365,35 @@ function createMultiSelectionWidget(widgetContainerEl, selection, selectionRange
   // create select options from selectionRange minus selection
   fillMultiSelectionListWithOptions(selectEl, selectionRange, keyProp,
     { "displayProp": displayProp, "selection": selection });
+}
+/**
+ * Fill the select element of an Multiple Choice Widget with option elements created
+ * from the selectionRange minus an optional selection set specified in optPar
+ *
+ * @param {object} selectEl  A select(ion list) element
+ * @param {object} selectionRange  A map of objects
+ * @param {string} keyProp  The standard identifier property
+ * @param {object} optPar [optional]  An record of optional parameter slots
+ *                 including optPar.displayProp and optPar.selection
+ */
+function fillMultiSelectionListWithOptions(selectEl, selectionRange, keyProp, optPar) {
+  var options = [], obj = null, displayProp = "";
+  // delete old contents
+  selectEl.innerHTML = "";
+  // create "no selection yet" entry
+  selectEl.add(createOption("", " --- "));
+  // create option elements from object property values
+  options = Object.keys(selectionRange);
+  for (const i of options.keys()) {
+    // if invoked with a selection argument, only add options for objects
+    // that are not yet selected
+    if (!optPar || !optPar.selection || !optPar.selection[options[i]]) {
+      obj = selectionRange[options[i]];
+      if (optPar && optPar.displayProp) displayProp = optPar.displayProp;
+      else displayProp = keyProp;
+      selectEl.add(createOption(obj[keyProp], obj[displayProp]));
+    }
+  }
 }
 
 export { cloneObject, isIntegerOrIntegerString, fillSelectWithOptions, createListFromMap, createMultiSelectionWidget };

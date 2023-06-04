@@ -60,10 +60,16 @@ class Person {
     }
     return validationResult;
   }
-  static checkPersonIdAsIdRef(id) {
-    var validationResult = Person.checkPersonId(id);
-    if ((validationResult instanceof NoConstraintViolation) && id) {
-      if (!Person.instances[id]) {
+  static checkPersonIdAsIdRef(id, DirectType) {
+    if (!DirectType) DirectType = Person;  // default
+    id = parseInt(id);
+    if (isNaN(id)) {
+      return new MandatoryValueConstraintViolation(
+        "A positive integer value for the person ID is required!");
+    }
+    let validationResult = Person.checkPersonId(id);
+    if ((validationResult instanceof NoConstraintViolation)) {
+      if (!DirectType.instances[id]) {
         validationResult = new ReferentialIntegrityConstraintViolation(
           'There is no person record with this person ID!');
       }
@@ -88,7 +94,7 @@ class Person {
   }
   /* Convert object to string */
   toString() {
-    return `Person{ persID: ${this.personId}, name: ${this.name} }`;
+    return `Person{ personId: ${this.personId}, name: ${this.name} }`;
   }
   /* Convert object to row/record */
   toJSON() {

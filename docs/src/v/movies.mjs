@@ -17,6 +17,7 @@ import { fillSelectWithOptions, createListFromMap, createMultiSelectionWidget } 
  Load data
  ***************************************************************/
 Movie.retrieveAll();
+//if (Movie.instances !== null) console.log(Object.keys(Movie.instances));
 Person.retrieveAll();
 
 /***************************************************************
@@ -53,12 +54,12 @@ document.getElementById("RetrieveAndListAll")
     for (const key of Object.keys(Movie.instances)) {
       const movie = Movie.instances[key];
       // create list of persons for this movie
-      console.log("Actor ID " + movie.actors_id,);
-      const authListEl = createListFromMap(movie.actors_id, "name");
+      const authListEl = createListFromMap(movie.actors, "name");
       const row = tableBodyEl.insertRow();
       row.insertCell().textContent = movie.movieId;
       row.insertCell().textContent = movie.title;
       row.insertCell().textContent = movie.releaseDate;
+      row.insertCell().textContent = movie.category;
       if (movie.category) {
         switch (movie.category) {
           case MovieCategoryEL.TVSERIESEPISODE:
@@ -141,7 +142,7 @@ createFormEl["commit"].addEventListener("click", function () {
     title: createFormEl.title.value,
     releaseDate: createFormEl.releaseDate.value,
     actors: [],
-    director: createFormEl["selectDirector"].selectedIndex
+    director: createFormEl["selectDirector"].options[createFormEl["selectDirector"].selectedIndex].value
   };
   if (categoryStr) {
     // enum literal indexes start with 1
@@ -175,6 +176,7 @@ createFormEl["commit"].addEventListener("click", function () {
   );
   /* Incomplete code: no on-submit validation of "title" and "releaseDate" */
   // save the input data only if all form fields are valid
+
   if (createFormEl.checkValidity()) {
     // construct a list of person ID references
     for (const opt of selAuthOptions) {

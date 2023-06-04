@@ -231,17 +231,16 @@ class Movie {
     } else {
       // invoke foreign key constraint check
       validationResult = Person.checkPersonIdAsIdRef(directorId);
+      console.log("checkDirector " + validationResult.message + " " + directorId);
     }
     return validationResult;
   }
   set director(director) {
-    console.log("In Director " + director);
     if (!director) {  // unset director
       delete this._director;
     } else {
       // p can be an ID reference or an object reference
       const director_id = (typeof director !== "object") ? director : director.personId;
-      console.log("Director ID " + director_id);
       const validationResult = Movie.checkDirector(director_id);
       if (validationResult instanceof NoConstraintViolation) {
         // create the new director reference
@@ -251,7 +250,6 @@ class Movie {
         throw validationResult;
       }
     }
-    console.log("Done setting Director");
   }
   get actors() {
     return this._actors;
@@ -263,11 +261,11 @@ class Movie {
     } else {
       // invoke foreign key constraint check
       validationResult = Person.checkPersonIdAsIdRef(actorId);
+      console.log("checkActors " + validationResult.message);
     }
     return validationResult;
   }
   addActors(actor) {
-    console.log("In Actor add " + actor);
     // a can be an ID reference or an object reference
     const actors_id = (typeof actor !== "object") ? parseInt(actor) : actor.personId;
     if (actors_id) {
@@ -298,7 +296,6 @@ class Movie {
   }
   set actors(actor) {
     this._actors = {};
-    console.log("In Actor setting");
     if (Array.isArray(actor)) {  // array of IdRefs
       for (const idRef of actor) {
         this.addActors(idRef);
@@ -308,12 +305,12 @@ class Movie {
         this.addActors(actor[idRef]);
       }
     }
-    console.log("Done setting Actor");
   }
   /*********************************************************
    ***  Other Instance-Level Methods  ***********************
    **********************************************************/
-  toString() {
+  /**toString() {
+    console.log(this.movieId + " " + this.title + " " + this.releaseDate);
     var movieStr = `Movie{ movieId: ${this.movieId}, title: ${this.title}, releaseDate: ${this.releaseDate}, director: ${this.director}`;
     //if (this.director) movieStr += `, director: ${this.director}`;
     switch (this.category) {
@@ -326,10 +323,16 @@ class Movie {
         break;
     }
     return `${movieStr}, actors: ${Object.keys(this.actors).join(",")} }`;
+  }**/
+  toString() {
+    var movieStr = `Movie{ movieId: ${this.movieId}, title: ${this.title}, releaseDate: ${this.releaseDate}, director: ${this.director}`;
+    //if (this.director) movieStr += `, director: ${this.director}`;
+    return `${movieStr}, actors: ${Object.keys(this.actors).join(",")} }`;
   }
   /* Convert object to record */
   toJSON() { // is invoked by JSON.stringify in Movie.saveAll
     const rec = {};
+    console.log("toJSON" + this);
     for (const p of Object.keys(this)) {
       // copy only property slots with underscore prefix
       if (p.charAt(0) !== "_") continue;
@@ -461,7 +464,9 @@ Movie.destroy = function (movieId) {
 Movie.retrieveAll = function () {
   var movies = {};
   try {
-    if (!localStorage["movies"]) localStorage.setItem("movies", "{}");
+    if (!localStorage["movies"]) {
+      localStorage.setItem("movies", "{}");
+    }
     else {
       movies = JSON.parse(localStorage["movies"]);
       console.log(Object.keys(movies).length + " movies loaded.");
@@ -470,7 +475,12 @@ Movie.retrieveAll = function () {
     alert("Error when reading from Local Storage\n" + e);
   }
   for (const movieId of Object.keys(movies)) {
-    Movie.instances[movieId] = Movie.convertRec2Obj(movies[movieId]);
+    //Movie.instances[movieId] = Movie.convertRec2Obj(movies[movieId]);
+    try {
+      Movie.instances[movieId] = new Movie(movies[movieId]);
+    } catch (e) {
+      console.log(`${e.constructor.name} while deserializing movie ${movieId}: ${e.message}`);
+    }
   }
 };
 /**
@@ -483,6 +493,7 @@ Movie.retrieveAll = function () {
 Movie.convertRec2Obj = function (movieRow) {
   var movie = null;
   try {
+    for (let k of Object.keys(movieRow)) console.log("Rec20 " + k);
     movie = new Movie(movieRow);
   } catch (e) {
     console.log(`${e.constructor.name} while deserializing a movie record: ${e.message}`);
