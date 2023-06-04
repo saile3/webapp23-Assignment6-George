@@ -27,14 +27,14 @@ class Actor extends Person {
   }
   get agent() { return this._agent; }
   set agent(p) {
-    if (!p) {  // unset director
+    if (!p) {  // unset agent
       delete this._agent;
     } else {
       // p can be an ID reference or an object reference
       const person_id = (typeof p !== "object") ? p : Person.personId;
       const validationResult = Person.checkPersonIdAsIdRef(person_id);
       if (validationResult instanceof NoConstraintViolation) {
-        // create the new director reference
+        // create the new reference
         this._agent = Person.instances[person_id];
       } else {
         throw (validationResult + " : " + person_id);
@@ -156,10 +156,6 @@ Actor.retrieveAll = function () {
  *  Save all actor objects as records
  */
 Actor.saveAll = function () {
-  console.log("In SaveAll " + Object.keys(Actor.instances).length);
-  for (const key of Object.keys(Actor.instances)) {
-    console.log(Actor.instances[key].name);
-  }
   try {
     localStorage["actors"] = JSON.stringify(Actor.instances);
     console.log(Object.keys(Actor.instances).length + " actors saved.");

@@ -13,7 +13,7 @@ import {
 /**
  * Constructor function for the class Person
  * @constructor
- * @param {{personId: string, name: string, empNo: number}} [slots] -
+ * @param {{personId: string, name: string}} [slots] -
  *     A record of parameters.
  */
 class Person {

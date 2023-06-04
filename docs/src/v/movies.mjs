@@ -119,10 +119,10 @@ createFormEl.about.addEventListener("input", function () {
       parseInt(createFormEl.category.value) + 1).message);
 });
 //director
-selectDirectorEl.addEventListener("input", function () {
+/*selectDirectorEl.addEventListener("input", function () {
   selectDirectorEl.setCustomValidity(
     Movie.checkDirector(createFormEl["selectDirector"].selectedIndex).message);
-});
+});*/
 //actor
 selectActorsEl.addEventListener("input", function () {
   selectActorsEl.setCustomValidity(
@@ -182,6 +182,7 @@ createFormEl["commit"].addEventListener("click", function () {
     for (const opt of selAuthOptions) {
       slots.actors.push(opt.value);
     }
+    console.log("slots" + slots);
     Movie.add(slots);
     // un-render all segment/category-specific fields
     undisplayAllSegmentFields(createFormEl, MovieCategoryEL.labels);

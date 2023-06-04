@@ -15,61 +15,121 @@ import Movie, { MovieCategoryEL } from "../m/Movie.mjs";
  */
 function generateTestData() {
   try {
-    Movie.instances["0553345842"] = new Movie({
-      isbn: "0553345842",
-      title: "The Mind's I",
-      year: 1982
+
+    /*
+Movie.instances["1"] = new Movie({
+      movieId: "1",
+      title: "Pulp Fiction",
+      releaseDate: 1994-05-12,
+      category:"",
+      tvSeriesName:"",
+      episodeNo:"",
+      about:"",
+      directorIdRefs:"3",
+      actors_id:[3,4,5]
     });
-    Movie.instances["1463794762"] = new Movie({
-      isbn: "1463794762",
-      title: "The Critique of Pure Reason",
-      year: 2011
+   */
+
+    Movie.instances["1"] = new Movie({
+      movieId: "1",
+      title: "Pulp Fiction",
+      releaseDate: "1994-05-12",
+      directorIdRefs: "3",
+      actors_id: ["3", "4", "5"]
     });
-    Movie.instances["0631232826"] = new Movie({
-      isbn: "0631232826",
-      title: "Kant",
-      year: 2001,
-      category: MovieCategoryEL.TEXTBOOK,
-      subjectArea: "Philosophy"
-    });
-    Movie.instances["0300029829"] = new Movie({
-      isbn: "0300029829",
-      title: "Kant's Life and Thoughts",
-      year: 1983,
-      category: MovieCategoryEL.BIOGRAPHY,
-      about: "Immanuel Kant"
-    });
+
     Movie.saveAll();
-    Employee.instances["1001"] = new Employee({
-      personId: 1001,
-      name: "Harry Wagner",
-      empNo: 21035
-    });
-    Employee.instances["1002"] = new Employee({
-      personId: 1002,
-      name: "Peter Boss",
-      empNo: 23107,
-      category: EmployeeCategoryEL.MANAGER,
-      department: "Marketing"
-    });
-    Employee.saveAll();
-    Author.instances["1001"] = new Author({
-      personId: 1001,
-      name: "Harry Wagner",
-      biography: "Born in Boston, MA, in 1956, ..."
-    });
-    Author.instances["1077"] = new Author({
-      personId: 1077,
-      name: "Immanuel Kant",
-      biography: "Immanuel Kant (1724-1804) was a German philosopher ..."
-    });
-    Author.saveAll();
+
     // an example of a person that is neither an employee, nor an author
-    Person.instances["1003"] = new Person({
-      personId: 1003,
-      name: "Tom Daniels"
+    Person.instances["14"] = new Person({
+      personId: 14,
+      name: "John Forbes Nash"
+    });
+    Person.instances["15"] = new Person({
+      personId: 15,
+      name: "John Doe"
+    });
+    Person.instances["16"] = new Person({
+      personId: 16,
+      name: "John Doe"
     });
     Person.saveAll();
+
+    //Director
+    Director.instances["1"] = new Director({
+      personId: 1,
+      name: "Stephen Frears"
+    });
+    Director.instances["2"] = new Director({
+      personId: 2,
+      name: "George Lucas"
+    });
+    Director.instances["3"] = new Director({
+      personId: 3,
+      name: "Quentin Tarantino"
+    });
+    Director.instances["9"] = new Director({
+      personId: 9,
+      name: "Russell Crowe"
+    });
+    Director.instances["13"] = new Director({
+      personId: 13,
+      name: "Marc Forster"
+    });
+    Director.saveAll();
+
+    //Actor
+    Actor.instances["3"] = new Actor({
+      personId: 3,
+      name: "Quentin Tarantino",
+      agent: ""
+    });
+    Actor.instances["4"] = new Actor({
+      personId: 4,
+      name: "Uma Thurman",
+      agent: "15"
+    });
+    Actor.instances["5"] = new Actor({
+      personId: 5,
+      name: "John Travolta",
+      agent: ""
+    });
+    Actor.instances["6"] = new Actor({
+      personId: 6,
+      name: "Ewan McGregor",
+      agent: ""
+    });
+    Actor.instances["7"] = new Actor({
+      personId: 7,
+      name: "Natalie Portman",
+      agent: ""
+    });
+    Actor.instances["8"] = new Actor({
+      personId: 8,
+      name: "Keanu Reeves",
+      agent: "16"
+    });
+    Actor.instances["9"] = new Actor({
+      personId: 9,
+      name: "Russell Crowe",
+      agent: "16"
+    });
+    Actor.instances["10"] = new Actor({
+      personId: 10,
+      name: "Seth MacFarlane",
+      agent: ""
+    });
+    Actor.instances["11"] = new Actor({
+      personId: 11,
+      name: "Naomi Watts",
+      agent: ""
+    });
+    Actor.instances["12"] = new Actor({
+      personId: 12,
+      name: "Ed Harris",
+      agent: "15"
+    });
+    Actor.saveAll();
   } catch (e) {
     console.log(`${e.constructor.name}: ${e.message}`);
   }

@@ -14,6 +14,8 @@ import {
   UniquenessConstraintViolation
 } from "../../lib/errorTypes.mjs";
 import { Enumeration } from "../../lib/Enumeration.mjs";
+import Director from "./Director.mjs";
+import Actor from "./Actor.mjs";
 /**
  * Enumeration type
  * @global
@@ -230,8 +232,7 @@ class Movie {
       validationResult = new MandatoryValueConstraintViolation("The Movie Director value is manditory");
     } else {
       // invoke foreign key constraint check
-      validationResult = Person.checkPersonIdAsIdRef(directorId);
-      console.log("checkDirector " + validationResult.message + " " + directorId);
+      validationResult = Director.checkPersonIdAsIdRef(directorId);
     }
     return validationResult;
   }
@@ -243,9 +244,7 @@ class Movie {
       const director_id = (typeof director !== "object") ? director : director.personId;
       const validationResult = Movie.checkDirector(director_id);
       if (validationResult instanceof NoConstraintViolation) {
-        // create the new director reference
-        //Person.instances[director_id]._directedMovies[this._movieId] = this;
-        this._director = Person.instances[director_id];
+        this._director = Director.instances[director_id];
       } else {
         throw validationResult;
       }
@@ -260,8 +259,7 @@ class Movie {
       validationResult = new MandatoryValueConstraintViolation("Movie Actor is manditory");
     } else {
       // invoke foreign key constraint check
-      validationResult = Person.checkPersonIdAsIdRef(actorId);
-      console.log("checkActors " + validationResult.message);
+      validationResult = Actor.checkPersonIdAsIdRef(actorId);
     }
     return validationResult;
   }
