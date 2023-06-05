@@ -70,6 +70,8 @@ document.getElementById("RetrieveAndListAll")
             row.insertCell().textContent = "Biography of: " + movie.about;
             break;
         }
+      } else {
+        row.insertCell().textContent = movie.category;
       }
       //the movie director, show its name
       row.insertCell().textContent =

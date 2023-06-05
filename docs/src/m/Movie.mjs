@@ -335,7 +335,7 @@ class Movie {
       switch (p) {
         case "_director":
           // convert object reference to ID reference
-          if (this._director) rec.director = this._director.personId;
+          if (this._director) rec.directorIdRefs = this._director.personId;
           break;
         case "_actors":
           // convert the map of object references to a list of ID references
@@ -473,7 +473,8 @@ Movie.retrieveAll = function () {
   for (const movieId of Object.keys(movies)) {
     //Movie.instances[movieId] = Movie.convertRec2Obj(movies[movieId]);
     try {
-      console.log(movies[movieId]);
+      // console.log(movies[movieId]);
+      //console.log(movies[movieId], movies[movieId].title, movies[movieId].releaseDate, movies[movieId].category, movies[movieId].tvSeriesName, movies[movieId].episodeNo, movies[movieId].about, movies[movieId].directorIdRefs, movies[movieId].actors_id);
       Movie.instances[movieId] = new Movie(movies[movieId]);
     } catch (e) {
       console.log(`${e.constructor.name} while deserializing movie ${movieId}: ${e.message}`);
