@@ -12,6 +12,8 @@ import Movie, { MovieCategoryEL } from "../m/Movie.mjs";
 import Person from "../m/Person.mjs";
 import { displaySegmentFields, undisplayAllSegmentFields } from "./app.mjs"
 import { fillSelectWithOptions, createListFromMap, createMultiSelectionWidget } from "../../lib/util.mjs";
+import Actor from "../m/Actor.mjs";
+import Director from "../m/Director.mjs";
 
 /***************************************************************
  Load data
@@ -59,7 +61,6 @@ document.getElementById("RetrieveAndListAll")
       row.insertCell().textContent = movie.movieId;
       row.insertCell().textContent = movie.title;
       row.insertCell().textContent = movie.releaseDate;
-      row.insertCell().textContent = movie.category;
       if (movie.category) {
         switch (movie.category) {
           case MovieCategoryEL.TVSERIESEPISODE:
@@ -92,9 +93,9 @@ document.getElementById("Create").addEventListener("click", function () {
   document.getElementById("Movie-C").style.display = "block";
   undisplayAllSegmentFields(createFormEl, MovieCategoryEL.labels);
   // set up a single selection list for selecting a Director
-  fillSelectWithOptions(selectDirectorEl, Person.instances, "name");
+  fillSelectWithOptions(selectDirectorEl, Director.instances, "name");
   // set up a multiple selection list for selecting Actors
-  fillSelectWithOptions(selectActorsEl, Person.instances,
+  fillSelectWithOptions(selectActorsEl, Actor.instances,
     "personId", { displayProp: "name" });
   createFormEl.reset();
 });
@@ -142,7 +143,7 @@ createFormEl["commit"].addEventListener("click", function () {
     title: createFormEl.title.value,
     releaseDate: createFormEl.releaseDate.value,
     actors: [],
-    director: createFormEl["selectDirector"].options[createFormEl["selectDirector"].selectedIndex].value
+    director: selectDirectorEl.options[selectDirectorEl.selectedIndex].value
   };
   if (categoryStr) {
     // enum literal indexes start with 1
@@ -237,7 +238,7 @@ updateFormEl["commit"].addEventListener("click", function () {
     movieId: updateFormEl.movieId.value,
     title: updateFormEl.title.value,
     releaseDate: updateFormEl.releaseDate.value,
-    director_id: updateFormEl["selectDirector"].selectedIndex
+    director_id: updateDirectorEl.options[updateDirectorEl.selectedIndex].value
   };
   if (categoryStr) {
     slots.category = parseInt(categoryStr) + 1;
@@ -302,10 +303,10 @@ function handleMovieSelectChangeEvent() {
     updateFormEl.title.value = movie.title;
     updateFormEl.releaseDate.value = movie.releaseDate;
     // set up the associated director selection list
-    fillSelectWithOptions(selectDirectorEl, Person.instances, "name");
+    fillSelectWithOptions(selectDirectorEl, Director.instances, "name");
     // set up the associated actor selection widget
     createMultiSelectionWidget(selectPersonsWidget, movie.actors,
-      Person.instances, "personId", "name", 1);  // minCard=1
+      Actor.instances, "personId", "name", 1);  // minCard=1
     // assign associated director as the selected option to select element
     if (movie.director) updateFormEl["selectDirector"].value = movie.director.name;
     if (movie.category) {
@@ -338,7 +339,7 @@ function handleMovieSelectChangeEvent() {
   } else {
     updateFormEl.reset();
   }
-}
+};
 
 /**********************************************
  * Use case Delete Movie

@@ -28,17 +28,16 @@ Movie.instances["1"] = new Movie({
       directorIdRefs:"3",
       actors_id:[3,4,5]
     });
-   */
-
     Movie.instances["1"] = new Movie({
       movieId: "1",
       title: "Pulp Fiction",
       releaseDate: "1994-05-12",
-      directorIdRefs: "3",
-      actors_id: ["3", "4", "5"]
+      directorIdRefs: 3,
+      actors_id: [3, 4, 5]
     });
 
     Movie.saveAll();
+*/
 
     // an example of a person that is neither an employee, nor an author
     Person.instances["14"] = new Person({

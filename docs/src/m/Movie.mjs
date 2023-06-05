@@ -153,7 +153,6 @@ class Movie {
   get tvSeriesName() { return this._tvSeriesName; }
   static checkTvSeriesName(sA, c) {
     const cat = parseInt(c);
-    console.log(sA + " " + " " + c + " " + MovieCategoryEL.TVSERIESEPISODE);
     if (cat === MovieCategoryEL.TVSERIESEPISODE && !sA) {
       return new MandatoryValueConstraintViolation(
         "A Tv Series Name must be provided for a Tv Series!");
@@ -272,7 +271,7 @@ class Movie {
         // add the new person reference
         const key = String(actors_id);
         //Person.instances[key]._playedMovies[this._movieId] = this;
-        this._actors[key] = Person.instances[key];
+        this._actors[key] = Actor.instances[key];
       } else {
         throw validationResult;
       }
@@ -285,7 +284,6 @@ class Movie {
       const validationResult = Movie.checkActors(actors_id);
       if (validationResult instanceof NoConstraintViolation) {
         // delete the person reference
-        delete this._actors[String(actors_id)]._playedMovies[this._movieId];
         delete this._actors[String(actors_id)];
       } else {
         throw validationResult;
@@ -475,6 +473,7 @@ Movie.retrieveAll = function () {
   for (const movieId of Object.keys(movies)) {
     //Movie.instances[movieId] = Movie.convertRec2Obj(movies[movieId]);
     try {
+      console.log(movies[movieId]);
       Movie.instances[movieId] = new Movie(movies[movieId]);
     } catch (e) {
       console.log(`${e.constructor.name} while deserializing movie ${movieId}: ${e.message}`);
@@ -491,7 +490,7 @@ Movie.retrieveAll = function () {
 Movie.convertRec2Obj = function (movieRow) {
   var movie = null;
   try {
-    for (let k of Object.keys(movieRow)) console.log("Rec20 " + k);
+    //for (let k of Object.keys(movieRow)) console.log("Rec20 " + k);
     movie = new Movie(movieRow);
   } catch (e) {
     console.log(`${e.constructor.name} while deserializing a movie record: ${e.message}`);
